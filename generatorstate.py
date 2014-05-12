@@ -9,6 +9,9 @@ class State:
 		self.args = None
 		self.intermission = intermission
 
+	def __call__(self, *args):
+		return self.tick(*args)
+
 	def tick(self, *args):
 		if self.args != args:
 			self.args = args

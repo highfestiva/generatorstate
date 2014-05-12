@@ -2,13 +2,14 @@
 
 from generatorstate import State
 
-def state_machine_tick():
+def print_files_state_machine_main():
+	'This is the state machine. yield waits for the next tick, return restarts.'
 	import os
 	for path,directories,files in os.walk('/'):
 		for filename in files:
 			filename = os.path.join(path,filename)
 			print(filename)
-			yield	# yield resumes after next timeslice.
+			yield	# yield resumes in the next timeslice.
 			if filename.endswith('txt'):
 				print('Found a text file:')
 				yield
@@ -20,8 +21,9 @@ def state_machine_tick():
 					print('All the error handling you could ever want!')
 					yield
 	print('Nice one! Restarting from root again.')
-	# Returning from the state machine (as opposed to yielding) restarts the state machine from scratch.
+	# Returning from the state machine (as opposed to yielding) restarts the state machine function from scratch.
 
-ticker = State(state_machine_tick, intermission=0.2)
+# Tick through each file, each line, each error using the state machine.
+tick_another_file = State(print_files_state_machine_main, intermission=0.2)
 while True:
-	ticker.tick()
+	tick_another_file()
